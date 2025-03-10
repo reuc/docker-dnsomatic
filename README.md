@@ -13,7 +13,7 @@ Builds of the image are available on [Docker Hub](https://hub.docker.com/r/reuc/
 
 Alternatively you can build the image yourself.
 
-    docker build --tag codeworksio/dnsomatic \
+    docker build --tag reuc/dnsomatic \
         github.com/reuc/docker-dnsomatic
 
 Quickstart
