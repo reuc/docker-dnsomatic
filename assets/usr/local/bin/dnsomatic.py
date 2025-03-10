@@ -12,6 +12,7 @@ def log(level, msg):
 # get environment variables
 username = os.getenv('DNSOMATIC_USERNAME')
 password = os.getenv('DNSOMATIC_PASSWORD')
+hostname = os.getenv('DNSOMATIC_HOSTNAME')
 delay = int(os.getenv('DNSOMATIC_DELAY'))
 interval = int(os.getenv('DNSOMATIC_INTERVAL'))
 tries = int(os.getenv('DNSOMATIC_TRIES'))
@@ -30,14 +31,23 @@ while True:
         if req.status_code == 200:
             newIp = req.text
             if newIp != currentIp:
-
-                # update DNS-O-Matic account
-                req = requests.get('https://updates.dnsomatic.com/nic/update?myip=' + newIp, auth=(username, password))
-                if req.status_code != 200 or req.text.rsplit()[0] != 'good':
-                    raise Exception(req.text)
-
-                log('INFO', ('Current IP ' if currentIp == '' else 'New IP ') + newIp)
-                currentIp = newIp
+                if DNSOMATIC_HOSTNAME in os.environ:
+                    
+                    # update all in DNS-O-Matic account
+                    req = requests.get('https://updates.dnsomatic.com/nic/update?hostname=' + hostname + 'myip=' + newIp, auth=(username, password))
+                    if req.status_code != 200 or req.text.rsplit()[0] != 'good':
+                        raise Exception(req.text)
+    
+                    log('INFO', ('Current IP ' if currentIp == '' else 'New IP ') + newIp)
+                    currentIp = newIp
+                else:
+                    # update all in DNS-O-Matic account
+                    req = requests.get('https://updates.dnsomatic.com/nic/update?myip=' + newIp, auth=(username, password))
+                    if req.status_code != 200 or req.text.rsplit()[0] != 'good':
+                        raise Exception(req.text)
+    
+                    log('INFO', ('Current IP ' if currentIp == '' else 'New IP ') + newIp)
+                    currentIp = newIp
         else:
             raise Exception(req.text)
     except Exception as e:
