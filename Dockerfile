@@ -6,7 +6,8 @@ ENV DNSOMATIC_USERNAME="username" \
     DNSOMATIC_INTERVAL="60" \
     DNSOMATIC_TRIES="0"
 
-RUN pip install \
+RUN set -ex; \
+    pip install \
         pytz \
         requests
 
