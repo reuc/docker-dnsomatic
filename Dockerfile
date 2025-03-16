@@ -7,9 +7,9 @@ ENV DNSOMATIC_USERNAME="username" \
     DNSOMATIC_TRIES="0"
 
 RUN set -ex; \
-    pip3 install \
+    pip install \
         pytz \
-        requests
+        requests --break-system-packages
 
 COPY assets/ /
 
