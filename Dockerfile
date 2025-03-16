@@ -7,7 +7,7 @@ ENV DNSOMATIC_USERNAME="username" \
     DNSOMATIC_TRIES="0"
 
 RUN set -ex; \
-    pip install \
+    pip3 install \
         pytz \
         requests
 
