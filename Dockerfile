@@ -1,4 +1,4 @@
-FROM reuc/python:latest
+FROM reuc/docker-ubuntu
 
 ENV DNSOMATIC_USERNAME="username" \
     DNSOMATIC_PASSWORD="password" \
