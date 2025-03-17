@@ -14,7 +14,7 @@ RUN set -ex; \
 
 COPY assets/ /
 
-CMD [ "python", "-u", "/usr/local/bin/dnsomatic.py" ]
+CMD [ "python3", "-u", "/usr/local/bin/dnsomatic.py" ]
 
 ### METADATA ###################################################################
 
