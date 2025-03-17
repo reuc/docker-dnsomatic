@@ -4,7 +4,8 @@ ENV DNSOMATIC_USERNAME="username" \
     DNSOMATIC_PASSWORD="password" \
     DNSOMATIC_DELAY="60" \
     DNSOMATIC_INTERVAL="60" \
-    DNSOMATIC_TRIES="0"
+    DNSOMATIC_TRIES="0" \
+    DNSOMATIC_HOSTNAME="fqdn"
 
 RUN set -ex; \
     pip install \
