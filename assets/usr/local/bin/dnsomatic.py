@@ -2,12 +2,15 @@ import os, time, requests
 from datetime import datetime as dt
 from pytz import timezone as tz
 
+
+
 # log message
 def log(level, msg):
     now = dt.now(tz(os.getenv('TZ')))
     datetime = now.strftime('%Y/%m/%d %H:%M:%S.%f')[:-3] + now.strftime('%z')
     print(datetime + '|dnsomatic|' + level + '|' + msg)
     return
+
 
 # get environment variables
 username = os.getenv('DNSOMATIC_USERNAME')
@@ -25,27 +28,32 @@ if delay > 0:
 currentIp = ''
 tried = 0
 while True:
+    headers = {'User-Agent': 'Docker_Updater/1.0'}
     try:
         # get your IP address
         req = requests.get('http://myip.dnsomatic.com/')
         if req.status_code == 200:
             newIp = req.text
             if newIp != currentIp:
-                if DNSOMATIC_HOSTNAME in os.environ:
-                    
+                if hostname != 'fqdn':
+
                     # update all in DNS-O-Matic account
-                    req = requests.get('https://updates.dnsomatic.com/nic/update?hostname=' + hostname + 'myip=' + newIp, auth=(username, password))
+
+                    req = requests.get(
+                        'https://updates.dnsomatic.com/nic/update?hostname=' + hostname + '&myip=' + newIp,
+                        headers= headers, auth=(username, password))
                     if req.status_code != 200 or req.text.rsplit()[0] != 'good':
                         raise Exception(req.text)
-    
+
                     log('INFO', ('Current IP ' if currentIp == '' else 'New IP ') + newIp)
                     currentIp = newIp
                 else:
                     # update all in DNS-O-Matic account
-                    req = requests.get('https://updates.dnsomatic.com/nic/update?myip=' + newIp, auth=(username, password))
+                    req = requests.get('https://updates.dnsomatic.com/nic/update?myip=' + newIp,
+                                       headers = {'User-Agent': USER_AGENT}, auth=(username, password))
                     if req.status_code != 200 or req.text.rsplit()[0] != 'good':
                         raise Exception(req.text)
-    
+
                     log('INFO', ('Current IP ' if currentIp == '' else 'New IP ') + newIp)
                     currentIp = newIp
         else:
